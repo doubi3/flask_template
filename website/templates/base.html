@@ -6,54 +6,72 @@
     <title>{% block title %}Home{% endblock %}</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-
-    <script
-      src="https://kit.fontawesome.com/6e2657ae6b.js"
-      crossorigin="anonymous"
-    ></script>
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css"
-      integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni"
-      crossorigin="anonymous"
-    />
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   </head>
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <button
-        class="navbar-toggle"
+        class="navbar-toggler"
         type="button"
         data-toggle="collapse"
         data-target="#navbar"
       >
         <span class="navbar-toggler-icon"> </span>
       </button>
-    </nav>
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+        {% if user.is_authenticated %}
+          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+          <a class="nav-item nav-link" id="home" href="/">Home</a>
+        {% else %}
+          <a class="nav-item nav-link" id="login" href="/login">login</a>
+          <a class="nav-item nav-link" id="register" href="/register">Register</a>
+        {% endif %}
 
-    {% comment %} This binds to javascript file {% endcomment %}
-    <script
+        </div>
+      </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'error' %}
+        <div class="alert alert-danger alter-dismissable fade show" role="alert">
+        {{ message }}
+        <button class="close" type="button" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alter-dismissable fade show" role="alert">
+        {{ message }}
+        <button class="close" type="button" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+    {% block content %}
+    {% endblock %}
+    </div>
+  
+  
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+
+  <script
       src="{{ url_for('static', filename='main.js')}}"
       async
       defer
-    ></script>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-      crossorigin="anonymous"
     ></script>
   </body>
 </html>
