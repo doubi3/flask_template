@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import Blog
 from . import db
+import json
 
 
 views = Blueprint('views', __name__)
@@ -23,6 +24,21 @@ def home():
 
 
     return render_template("home.html", user=current_user)
+
+@views.route('/delete-blog', methods=['POST'])
+def delete_blog():
+    blog = json.loads(request.data)
+    blogId = blog['blogId']
+    blog = Blog.query.get(blogId)
+
+    if blog:
+        if blog.user_id == current_user.id:
+            db.session.delete(blog)
+            db.session.commit()
+    return jsonify({})
+
+
+    
 
 # @views.route('/login')
 # def login():
